@@ -1,7 +1,8 @@
 package com.squareup.android.api.directory
 
+import com.squareup.android.api.directory.data.GetEmployeesResponseDto
 import kotlinx.coroutines.flow.Flow
 
-interface DirectoryRepositoryImpl {
-    fun getEmployees(): Flow<String>
+interface DirectoryRepository {
+    fun getEmployees(): Flow<GetEmployeesResponseDto>
 }

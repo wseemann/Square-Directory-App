@@ -1,0 +1,3 @@
+<resources>
+    <string name="base_url">https://s3.amazonaws.com</string>
+</resources>
