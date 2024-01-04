@@ -15,3 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Square Directory App"
 include(":app")
+include(":modules:common:api")
+include(":modules:common:network")
+include(":modules:feature:employee-directory")
