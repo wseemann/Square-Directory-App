@@ -1,6 +1,5 @@
 package com.squareup.android.directory.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squareup.android.api.directory.DirectoryRepository
@@ -16,6 +15,8 @@ class EmployeeDirectoryViewModel @Inject constructor(
     private val directoryRepository: DirectoryRepository
 ) : ViewModel() {
 
+    private var cachedEmployees: List<Employee>? = null
+
     private val _employeeUpdates by lazy {
         MutableSharedFlow<List<Employee>>()
     }
@@ -23,16 +24,21 @@ class EmployeeDirectoryViewModel @Inject constructor(
 
     fun getEmployees() {
         viewModelScope.launch {
-            directoryRepository.getEmployees().collect { response ->
-                val employees = response.employees.map { employee ->
-                    Employee(
-                        uuid = employee.uuid.orEmpty(),
-                        fullName = employee.fullName.orEmpty(),
-                        photoUrlSmall = employee.photoUrlSmall.orEmpty(),
-                        team = employee.team.orEmpty()
-                    )
-                }
+            cachedEmployees?.let { employees ->
                 _employeeUpdates.emit(employees)
+            } ?: run {
+                directoryRepository.getEmployees().collect { response ->
+                    val employees = response.employees.map { employee ->
+                        Employee(
+                            uuid = employee.uuid.orEmpty(),
+                            fullName = employee.fullName.orEmpty(),
+                            photoUrlSmall = employee.photoUrlSmall.orEmpty(),
+                            team = employee.team.orEmpty()
+                        )
+                    }
+                    cachedEmployees = employees
+                    _employeeUpdates.emit(employees)
+                }
             }
         }
     }
