@@ -1,5 +1,8 @@
 package com.squareup.android.directory.model
 
 data class Employee(
-    val name: String
+    val uuid: String,
+    val fullName: String,
+    val photoUrlSmall: String,
+    val team: String
 )

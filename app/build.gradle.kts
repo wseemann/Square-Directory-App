@@ -42,7 +42,6 @@ kapt {
 }
 
 dependencies {
-    implementation(project(":modules:common:api"))
     implementation(project(":modules:feature:employee-directory"))
 
     implementation("com.google.dagger:hilt-android:2.47")
