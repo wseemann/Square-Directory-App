@@ -44,6 +44,7 @@ kapt {
 dependencies {
     implementation(project(":modules:common:api"))
 
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-android-compiler:2.47")
 
