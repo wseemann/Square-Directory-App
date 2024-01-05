@@ -32,7 +32,7 @@ class EmployeeAdapter(private var employees: ArrayList<Employee>) : RecyclerView
     }
 }
 
-class EmployeeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class EmployeeViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     private val requestManager = Glide.with(view.context)
 
@@ -46,7 +46,7 @@ class EmployeeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             .centerCrop()
             .into(binding.iconImageView)
 
-        binding.nameTextView.text = employee.fullName
-        binding.teamTextView.text = employee.team
+        binding.nameTextView.text = view.context.getString(R.string.employee_name, employee.fullName)
+        binding.teamTextView.text = view.context.getString(R.string.employee_team, employee.team)
     }
 }

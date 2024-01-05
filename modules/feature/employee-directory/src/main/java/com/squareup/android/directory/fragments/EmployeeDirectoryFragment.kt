@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.squareup.android.directory.adapters.EmployeeAdapter
 import com.squareup.android.directory.databinding.FragmentEmployeeDirectoryBinding
 import com.squareup.android.directory.model.Employee
@@ -16,10 +17,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EmployeeDirectoryFragment : Fragment() {
+class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val employeeDirectoryViewModel: EmployeeDirectoryViewModel by viewModels()
-    private lateinit var employeeAdapter: EmployeeAdapter
+    private val employeeAdapter = EmployeeAdapter(arrayListOf())
 
     private var _binding: FragmentEmployeeDirectoryBinding? = null
     private val binding get() = _binding!!
@@ -35,17 +36,18 @@ class EmployeeDirectoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
         binding.employeeRecyclerView.addItemDecoration(
             DividerItemDecoration(
                 binding.employeeRecyclerView.context,
                 DividerItemDecoration.VERTICAL
             )
         )
-        employeeAdapter = EmployeeAdapter(arrayListOf())
         binding.employeeRecyclerView.adapter = employeeAdapter
 
         initFlows()
-        employeeDirectoryViewModel.getEmployees()
+        binding.progressIndicator.visibility = View.VISIBLE
+        loadData(true)
     }
 
     override fun onDestroyView() {
@@ -57,7 +59,18 @@ class EmployeeDirectoryFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             employeeDirectoryViewModel.employeeUpdates.collect { employees ->
                 employeeAdapter.updateData(employees)
+                binding.swipeRefreshLayout.isRefreshing = false
+                binding.progressIndicator.visibility = View.GONE
             }
         }
+    }
+
+    override fun onRefresh() {
+        binding.swipeRefreshLayout.isRefreshing = true
+        loadData(false)
+    }
+
+    private fun loadData(fromCache: Boolean) {
+        employeeDirectoryViewModel.getEmployeeData(fromCache)
     }
 }

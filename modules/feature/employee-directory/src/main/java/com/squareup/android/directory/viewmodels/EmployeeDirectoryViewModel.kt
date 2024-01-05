@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.squareup.android.api.directory.DirectoryRepository
 import com.squareup.android.directory.model.Employee
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -22,24 +23,32 @@ class EmployeeDirectoryViewModel @Inject constructor(
     }
     val employeeUpdates: SharedFlow<List<Employee>> = _employeeUpdates
 
-    fun getEmployees() {
+    fun getEmployeeData(fromCache: Boolean) {
         viewModelScope.launch {
-            cachedEmployees?.let { employees ->
-                _employeeUpdates.emit(employees)
-            } ?: run {
-                directoryRepository.getEmployees().collect { response ->
-                    val employees = response.employees.map { employee ->
-                        Employee(
-                            uuid = employee.uuid.orEmpty(),
-                            fullName = employee.fullName.orEmpty(),
-                            photoUrlSmall = employee.photoUrlSmall.orEmpty(),
-                            team = employee.team.orEmpty()
-                        )
-                    }
-                    cachedEmployees = employees
+            if (fromCache) {
+                cachedEmployees?.let { employees ->
                     _employeeUpdates.emit(employees)
+                } ?: run {
+                    fetchEmployeeDataFromServer()
                 }
+            } else {
+                fetchEmployeeDataFromServer()
             }
+        }
+    }
+
+    private suspend fun fetchEmployeeDataFromServer() {
+        directoryRepository.getEmployees().collect { response ->
+            val employees = response.employees.map { employee ->
+                Employee(
+                    uuid = employee.uuid.orEmpty(),
+                    fullName = employee.fullName.orEmpty(),
+                    photoUrlSmall = employee.photoUrlSmall.orEmpty(),
+                    team = employee.team.orEmpty()
+                )
+            }
+            cachedEmployees = employees
+            _employeeUpdates.emit(employees)
         }
     }
 }
