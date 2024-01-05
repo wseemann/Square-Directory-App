@@ -21,6 +21,20 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/emptyListTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:text="@string/no_employee_data"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressIndicator"
         android:layout_width="wrap_content"

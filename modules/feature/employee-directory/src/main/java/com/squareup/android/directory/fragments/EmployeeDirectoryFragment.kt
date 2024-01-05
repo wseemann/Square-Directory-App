@@ -58,7 +58,13 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
     private fun initFlows() {
         viewLifecycleOwner.lifecycleScope.launch {
             employeeDirectoryViewModel.employeeUpdates.collect { employees ->
-                employeeAdapter.updateData(employees)
+                if (employees.isEmpty()) {
+                    binding.emptyListTextview.visibility = View.VISIBLE
+                    binding.employeeRecyclerView.visibility = View.GONE
+                } else {
+                    binding.employeeRecyclerView.visibility = View.VISIBLE
+                    employeeAdapter.updateData(employees)
+                }
                 binding.swipeRefreshLayout.isRefreshing = false
                 binding.progressIndicator.visibility = View.GONE
             }
