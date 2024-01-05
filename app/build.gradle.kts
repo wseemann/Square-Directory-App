@@ -46,6 +46,8 @@ dependencies {
     implementation(project(":modules:feature:employee-directory"))
 
     implementation("com.google.dagger:hilt-android:2.47")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     kapt("com.google.dagger:hilt-android-compiler:2.47")
 
     implementation("androidx.core:core-ktx:1.9.0")

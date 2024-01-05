@@ -1,4 +1,5 @@
 package com.squareup.android.directory.model
 
-class Employee {
-}
+data class Employee(
+    val name: String
+)

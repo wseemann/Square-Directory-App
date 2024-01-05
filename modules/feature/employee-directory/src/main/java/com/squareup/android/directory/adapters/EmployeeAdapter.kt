@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.android.directory.databinding.ListItemEmployeeBinding
 import com.squareup.android.directory.model.Employee
 
-class EmployeeDirectoryAdapter(private val employees: List<Employee>) : RecyclerView.Adapter<EmployeeViewHolder>() {
+class EmployeeAdapter(private val employees: List<Employee>) : RecyclerView.Adapter<EmployeeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
         return EmployeeViewHolder(ListItemEmployeeBinding.inflate(LayoutInflater.from(parent.context)).root)
     }
@@ -26,6 +26,6 @@ class EmployeeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val binding = ListItemEmployeeBinding.bind(view)
 
     fun bind(employee: Employee) {
-
+        binding.nameTextView.text = employee.name
     }
 }
