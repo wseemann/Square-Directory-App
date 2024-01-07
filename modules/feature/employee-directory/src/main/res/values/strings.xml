@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="api_error_message">Failed to load employee directory</string>
     <string name="employee_name">Name: %1$s</string>
     <string name="employee_team">Team: %1$s</string>
     <string name="no_employee_data">No employees found, please check your internet connection and try again</string>
