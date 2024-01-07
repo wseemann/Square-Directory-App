@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DirectoryRepository {
     fun getEmployees(
-        onLoading: suspend () -> Unit = {},
+        fromCache: Boolean,
         onError: suspend (errorMessage: String) -> Unit = {}
     ): Flow<GetEmployeesResponseDto>
 }

@@ -16,8 +16,6 @@ class EmployeeDirectoryViewModel @Inject constructor(
     private val directoryRepository: DirectoryRepository
 ) : ViewModel() {
 
-    private var cachedEmployees: List<Employee>? = null
-
     private val _employeeUpdates by lazy {
         MutableSharedFlow<UiState<List<Employee>>>()
     }
@@ -25,37 +23,22 @@ class EmployeeDirectoryViewModel @Inject constructor(
 
     fun getEmployeeData(fromCache: Boolean) {
         viewModelScope.launch {
-            if (fromCache) {
-                cachedEmployees?.let { employees ->
-                    _employeeUpdates.emit(UiState.Success(employees))
-                } ?: run {
-                    fetchEmployeeDataFromServer()
+            directoryRepository.getEmployees(
+                fromCache = fromCache,
+                onError = { errorMessage ->
+                    _employeeUpdates.emit(UiState.Error(errorMessage))
                 }
-            } else {
-                fetchEmployeeDataFromServer()
+            ).collect { response ->
+                val employees = response.employees.map { employee ->
+                    Employee(
+                        uuid = employee.uuid,
+                        fullName = employee.fullName,
+                        photoUrlSmall = employee.photoUrlSmall,
+                        team = employee.team
+                    )
+                }
+                _employeeUpdates.emit(UiState.Success(employees))
             }
-        }
-    }
-
-    private suspend fun fetchEmployeeDataFromServer() {
-        directoryRepository.getEmployees(
-            onLoading = {
-                _employeeUpdates.emit(UiState.Loading)
-            },
-            onError = { errorMessage ->
-                _employeeUpdates.emit(UiState.Error(errorMessage))
-            }
-        ).collect { response ->
-            val employees = response.employees.map { employee ->
-                Employee(
-                    uuid = employee.uuid.orEmpty(),
-                    fullName = employee.fullName.orEmpty(),
-                    photoUrlSmall = employee.photoUrlSmall.orEmpty(),
-                    team = employee.team.orEmpty()
-                )
-            }
-            cachedEmployees = employees
-            _employeeUpdates.emit(UiState.Success(employees))
         }
     }
 }

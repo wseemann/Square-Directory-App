@@ -16,12 +16,16 @@ import com.squareup.android.directory.databinding.FragmentEmployeeDirectoryBindi
 import com.squareup.android.directory.model.Employee
 import com.squareup.android.directory.model.UiState
 import com.squareup.android.directory.viewmodels.EmployeeDirectoryViewModel
+import com.tomergoldst.tooltips.ToolTip
+import com.tomergoldst.tooltips.ToolTipsManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
+    private val toolTipsManager: ToolTipsManager by lazy { ToolTipsManager() }
     private val employeeDirectoryViewModel: EmployeeDirectoryViewModel by viewModels()
     private val employeeAdapter = EmployeeAdapter(arrayListOf())
 
@@ -51,6 +55,14 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
         initFlows()
         binding.progressIndicator.visibility = View.VISIBLE
         loadData(fromCache = true)
+
+        toolTipsManager.show(ToolTip.Builder(
+            requireContext(),
+            binding.swipeRefreshLayout,
+            binding.content,
+            getString(R.string.employee_team),
+            ToolTip.POSITION_BELOW
+        ).withArrow(true).build())
     }
 
     override fun onDestroyView() {
@@ -62,7 +74,6 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
         viewLifecycleOwner.lifecycleScope.launch {
             employeeDirectoryViewModel.employeeUpdates.collect { state ->
                 when (state) {
-                    is UiState.Loading -> Unit
                     is UiState.Error -> {
                         showEmptyView()
                         hideLoadingViews()
@@ -83,7 +94,7 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
 
     override fun onRefresh() {
         binding.swipeRefreshLayout.isRefreshing = true
-        loadData( fromCache = false)
+        loadData(fromCache = false)
     }
 
     private fun loadData(fromCache: Boolean) {
@@ -92,7 +103,7 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
 
     private fun updateEmployeeAdapter(employees: List<Employee>) {
         binding.employeeRecyclerView.visibility = View.VISIBLE
-        employeeAdapter.updateData(employees)
+        employeeAdapter.updateEmployeeData(employees)
     }
 
     private fun showEmptyView() {

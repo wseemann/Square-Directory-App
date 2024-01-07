@@ -54,8 +54,11 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-android-compiler:2.47")
+    implementation("com.tomergoldst.android:tooltips:1.1.1")
 
+    testImplementation("io.mockk:mockk:1.13.1")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

@@ -25,7 +25,7 @@ class EmployeeAdapter(private var employees: ArrayList<Employee>) : RecyclerView
         holder.bind(employees[position])
     }
 
-    fun updateData(employees: List<Employee>) {
+    fun updateEmployeeData(employees: List<Employee>) {
         this.employees.clear()
         this.employees.addAll(employees)
         notifyDataSetChanged()
@@ -35,16 +35,19 @@ class EmployeeAdapter(private var employees: ArrayList<Employee>) : RecyclerView
 class EmployeeViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     private val requestManager = Glide.with(view.context)
-
     private val binding = ListItemEmployeeBinding.bind(view)
 
     fun bind(employee: Employee) {
         requestManager.clear(binding.iconImageView)
-        requestManager
-            .load(employee.photoUrlSmall)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .centerCrop()
-            .into(binding.iconImageView)
+
+        if (!employee.photoUrlSmall.isNullOrEmpty()) {
+            requestManager
+                .load(employee.photoUrlSmall)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .placeholder(R.drawable.employee_loading_placeholder)
+                .into(binding.iconImageView)
+        }
 
         binding.nameTextView.text = view.context.getString(R.string.employee_name, employee.fullName)
         binding.teamTextView.text = view.context.getString(R.string.employee_team, employee.team)
