@@ -4,4 +4,5 @@
     <string name="employee_name">Name: %1$s</string>
     <string name="employee_team">Team: %1$s</string>
     <string name="no_employee_data">No employees found, please check your internet connection and try again</string>
+    <string name="swipe_to_refresh">Swipe to refresh</string>
 </resources>

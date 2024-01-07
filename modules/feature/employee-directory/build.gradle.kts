@@ -51,10 +51,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.douglasjunior:android-simple-tooltip:1.1.0")
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.dagger:hilt-android:2.47")
     kapt("com.google.dagger:hilt-android-compiler:2.47")
-    implementation("com.tomergoldst.android:tooltips:1.1.1")
 
     testImplementation("io.mockk:mockk:1.13.1")
     testImplementation("junit:junit:4.13.2")
