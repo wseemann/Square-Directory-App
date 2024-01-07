@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.squareup.android.directory.adapters.EmployeeAdapter
 import com.squareup.android.directory.databinding.FragmentEmployeeDirectoryBinding
 import com.squareup.android.directory.model.Employee
+import com.squareup.android.directory.model.UiState
 import com.squareup.android.directory.viewmodels.EmployeeDirectoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -57,16 +58,25 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
 
     private fun initFlows() {
         viewLifecycleOwner.lifecycleScope.launch {
-            employeeDirectoryViewModel.employeeUpdates.collect { employees ->
-                if (employees.isEmpty()) {
-                    binding.emptyListTextview.visibility = View.VISIBLE
-                    binding.employeeRecyclerView.visibility = View.GONE
-                } else {
-                    binding.employeeRecyclerView.visibility = View.VISIBLE
-                    employeeAdapter.updateData(employees)
+            employeeDirectoryViewModel.employeeUpdates.collect { state ->
+                when (state) {
+                    is UiState.Loading -> Unit
+                    is UiState.Error -> {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        binding.progressIndicator.visibility = View.GONE
+                    }
+                    is UiState.Success -> {
+                        if (state.data.isEmpty()) {
+                            binding.emptyListTextview.visibility = View.VISIBLE
+                            binding.employeeRecyclerView.visibility = View.GONE
+                        } else {
+                            binding.employeeRecyclerView.visibility = View.VISIBLE
+                            employeeAdapter.updateData(state.data)
+                        }
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        binding.progressIndicator.visibility = View.GONE
+                    }
                 }
-                binding.swipeRefreshLayout.isRefreshing = false
-                binding.progressIndicator.visibility = View.GONE
             }
         }
     }

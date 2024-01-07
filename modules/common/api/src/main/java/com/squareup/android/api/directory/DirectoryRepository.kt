@@ -4,5 +4,8 @@ import com.squareup.android.api.directory.data.GetEmployeesResponseDto
 import kotlinx.coroutines.flow.Flow
 
 interface DirectoryRepository {
-    fun getEmployees(): Flow<GetEmployeesResponseDto>
+    fun getEmployees(
+        onLoading: suspend () -> Unit = {},
+        onError: suspend (errorMessage: String) -> Unit = {}
+    ): Flow<GetEmployeesResponseDto>
 }
