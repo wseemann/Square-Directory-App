@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import timber.log.Timber
 
 internal class DirectoryRepositoryImpl(
     private val dispatcher: CoroutineDispatcher,
@@ -20,6 +21,7 @@ internal class DirectoryRepositoryImpl(
             emit(directoryApi.getEmployees())
         }.flowOn(dispatcher)
             .catch {
+                Timber.e(it,"Failed to retrieve employees from the directory")
                 onError(it.message ?: "An unknown error occurred")
             }
     }
