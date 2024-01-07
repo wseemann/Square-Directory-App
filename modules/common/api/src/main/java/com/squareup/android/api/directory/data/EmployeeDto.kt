@@ -6,13 +6,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class EmployeeDto(
     @Json(name = "uuid")
-    val uuid: String? = null,
+    val uuid: String,
     @Json(name = "full_name")
-    val fullName: String? = null,
+    val fullName: String,
     @Json(name = "phone_number")
     val phoneNumber: String? = null,
     @Json(name = "email_address")
-    val emailAddress: String? = null,
+    val emailAddress: String,
     @Json(name = "biography")
     val biography: String? = null,
     @Json(name = "photo_url_small")
@@ -20,7 +20,7 @@ data class EmployeeDto(
     @Json(name = "photo_url_large")
     val photoUrlLarge: String? = null,
     @Json(name = "team")
-    val team: String? = null,
+    val team: String,
     @Json(name = "employee_type")
-    val employeeType: String? = null
+    val employeeType: String
 )
