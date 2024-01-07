@@ -1,4 +1,4 @@
-package com.squareup.android.directory
+package com.squareup.android.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

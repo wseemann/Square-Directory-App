@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    id("com.google.devtools.ksp").version("1.9.22-1.0.16")
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
 }
@@ -50,6 +51,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("com.squareup.moshi:moshi:1.15.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

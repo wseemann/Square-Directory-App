@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.squareup.android.directory"
+    namespace = "com.squareup.android.app"
     compileSdk = 34
 
     defaultConfig {

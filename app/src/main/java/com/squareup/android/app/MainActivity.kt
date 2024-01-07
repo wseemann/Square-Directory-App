@@ -1,4 +1,4 @@
-package com.squareup.android.directory
+package com.squareup.android.app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
