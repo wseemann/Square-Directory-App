@@ -22,5 +22,5 @@ data class EmployeeDto(
     @Json(name = "team")
     val team: String,
     @Json(name = "employee_type")
-    val employeeType: String
+    val employeeType: EmployeeTypes
 )
