@@ -15,8 +15,7 @@ internal class DirectoryRepositoryImpl(
 ) : DirectoryRepository {
 
     override fun getEmployees(
-        fromCache: Boolean,
-        onError: suspend (errorMessage: String) -> Unit
+        fromCache: Boolean
     ): Flow<GetEmployeesResponseDto> {
         return flow {
             if (fromCache) {
@@ -35,7 +34,7 @@ internal class DirectoryRepositoryImpl(
         }.flowOn(dispatcher)
             .catch {
                 Timber.e(it,"Failed to retrieve employees from the directory")
-                onError(it.message ?: "An unknown error occurred")
+                throw it
             }
     }
 }

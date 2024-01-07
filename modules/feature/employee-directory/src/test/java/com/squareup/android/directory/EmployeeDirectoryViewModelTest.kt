@@ -10,29 +10,28 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.slot
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.junit.Assert.assertTrue
 import org.junit.After
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Before
+import java.lang.Exception
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EmployeeDirectoryViewModelTest {
 
     private lateinit var dispatcher: CoroutineDispatcher
 
+    @MockK
     private lateinit var directoryRepository: DirectoryRepository
     private lateinit var employeeDirectoryViewModel: EmployeeDirectoryViewModel
 
@@ -56,27 +55,28 @@ class EmployeeDirectoryViewModelTest {
         val state = async {
             employeeDirectoryViewModel.employeeUpdates.first()
         }
-        every { directoryRepository.getEmployees(false, any()) } returns flowOf(GetEmployeesResponseDto(listOf()))
+        every { directoryRepository.getEmployees(false) } returns flowOf(GetEmployeesResponseDto(listOf()))
 
         employeeDirectoryViewModel.getEmployeeData(false)
 
         assertTrue(state.await() is UiState.Success)
-        coVerify(exactly = 1) { directoryRepository.getEmployees(fromCache = false, onError = any()) }
+        coVerify(exactly = 1) { directoryRepository.getEmployees(fromCache = false) }
         confirmVerified(directoryRepository)
     }
 
     @Test
     fun `test getEmployeeData failure returns the correct UI state`() = runTest {
-        val onErrorSlot = slot<suspend (String) -> Unit>()
         val state = async {
             employeeDirectoryViewModel.employeeUpdates.first()
         }
-        every { directoryRepository.getEmployees(false, capture(onErrorSlot)) } returns emptyFlow()
+        every { directoryRepository.getEmployees(false) } returns flow {
+            throw Exception()
+        }
 
         employeeDirectoryViewModel.getEmployeeData(false)
-        delay(2000)
-        onErrorSlot.captured.invoke("")
 
         assertTrue(state.await() is UiState.Error)
+        coVerify(exactly = 1) { directoryRepository.getEmployees(fromCache = false) }
+        confirmVerified(directoryRepository)
     }
 }

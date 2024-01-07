@@ -10,7 +10,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,30 +18,25 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Test
-
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.assertNotNull
 import org.junit.Before
-import java.lang.Exception
+import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DirectoryRepositoryImplTest {
 
     private lateinit var dispatcher: CoroutineDispatcher
 
-    private lateinit var onError: suspend (errorMessage: String) -> Unit
     @MockK
     private lateinit var directoryApi: DirectoryApi
-    
+
     @Before
     fun setup() {
         MockKAnnotations.init(this)
 
         dispatcher = StandardTestDispatcher()
         Dispatchers.setMain(dispatcher)
-
-        onError = mockk(relaxed = true)
     }
 
     @After
@@ -56,27 +50,30 @@ class DirectoryRepositoryImplTest {
         coEvery { directoryApi.getEmployees() } returns getEmployeesResponseDto
 
         val response = getDirectoryRepository().getEmployees(
-            fromCache = false,
-            onError = onError
+            fromCache = false
         ).firstOrNull()
 
         assertEquals(getEmployeesResponseDto, response)
-        coVerify(exactly = 0) { onError.invoke(any()) }
         coVerify(exactly = 1) { directoryApi.getEmployees() }
         confirmVerified(directoryApi)
     }
 
     @Test
     fun `test getEmployees with a failed API request`() = runTest {
+        var exception: Exception? = null
+
         coEvery { directoryApi.getEmployees() } throws Exception()
 
-        val response = getDirectoryRepository().getEmployees(
-            fromCache = false,
-            onError = onError
-        ).firstOrNull()
+        val response = try {
+            getDirectoryRepository().getEmployees(
+                fromCache = false
+            ).firstOrNull()
+        } catch (ex: Exception) {
+            exception = ex
+        }
 
-        assertNull(response)
-        coVerify(exactly = 1) { onError.invoke(any()) }
+        assertNotNull(exception)
+        assertEquals(Unit, response)
         coVerify(exactly = 1) { directoryApi.getEmployees() }
         confirmVerified(directoryApi)
     }
@@ -88,12 +85,10 @@ class DirectoryRepositoryImplTest {
         coEvery { directoryApi.getEmployees() } returns getEmployeesResponseDto
 
         val response = getDirectoryRepository(cachedGetEmployeesResponseDto).getEmployees(
-            fromCache = true,
-            onError = onError,
+            fromCache = true
         ).firstOrNull()
 
         assertEquals(cachedGetEmployeesResponseDto, response)
-        coVerify(exactly = 0) { onError.invoke(any()) }
         coVerify(exactly = 0) { directoryApi.getEmployees() }
         confirmVerified(directoryApi)
     }
@@ -104,12 +99,10 @@ class DirectoryRepositoryImplTest {
         coEvery { directoryApi.getEmployees() } returns getEmployeesResponseDto
 
         val response = getDirectoryRepository().getEmployees(
-            fromCache = true,
-            onError = onError,
+            fromCache = true
         ).firstOrNull()
 
         assertEquals(response, response)
-        coVerify(exactly = 0) { onError.invoke(any()) }
         coVerify(exactly = 1) { directoryApi.getEmployees() }
         confirmVerified(directoryApi)
     }
