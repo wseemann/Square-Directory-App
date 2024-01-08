@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.color.MaterialColors
 import com.squareup.android.directory.R
@@ -61,6 +62,7 @@ class EmployeeDirectoryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListen
     }
 
     private fun initView() {
+        employeeAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.swipeRefreshLayout.setOnRefreshListener(this)
         binding.employeeRecyclerView.addItemDecoration(
             DividerItemDecoration(
