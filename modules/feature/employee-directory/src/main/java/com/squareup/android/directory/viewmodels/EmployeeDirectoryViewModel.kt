@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,15 +29,18 @@ class EmployeeDirectoryViewModel @Inject constructor(
                 fromCache = fromCache
             ).catch {
                 _employeeUpdates.emit(UiState.Error(it.message))
-            }.collect { response ->
-                val employees = response.employees.map { employee ->
+            }.map { getEmployeesResponseDto ->
+                getEmployeesResponseDto.employees.map { employee ->
                     Employee(
                         uuid = employee.uuid,
                         fullName = employee.fullName,
                         photoUrlSmall = employee.photoUrlSmall,
                         team = employee.team
                     )
+                }.sortedBy { employee ->
+                    employee.fullName.substring(employee.fullName.lastIndexOf(" ") + 1)
                 }
+            }.collect { employees ->
                 _employeeUpdates.emit(UiState.Success(employees))
             }
         }
