@@ -44,8 +44,13 @@ class EmployeeViewHolder(private val view: View) : RecyclerView.ViewHolder(view)
             requestManager
                 .load(employee.photoUrlSmall)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
+                .circleCrop()
                 .placeholder(R.drawable.employee_loading_placeholder)
+                .into(binding.iconImageView)
+        } else {
+            requestManager
+                .load(R.drawable.employee_loading_placeholder)
+                .circleCrop()
                 .into(binding.iconImageView)
         }
 
