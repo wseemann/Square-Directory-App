@@ -16,7 +16,7 @@ A sample Android directory app that shows a list of employees from an endpoint
 - Writing unit testable code
 
 ## What was the reason for your focus? What problems were you trying to solve?
-
+- To ensure stability, reusability and ensure adding new features won't be cumbersome
 
 ## How long did you spend on this project?
 - 7 Hours
@@ -27,6 +27,7 @@ A sample Android directory app that shows a list of employees from an endpoint
 
 ## What do you think is the weakest part of your project?
 - There is limited documentation. I typically would use a tool like detekt to enforce proper documentation.
+- Overall, staying within the constraints outline in the prompt, I'm very proud of this work
 
 ## Did you copy any code or dependencies? Please make sure to attribute them here!
 - No code was copied, I did use the following libraries:
@@ -39,3 +40,5 @@ A sample Android directory app that shows a list of employees from an endpoint
   - [Android Simple Tooltip](https://github.com/douglasjunior/android-simple-tooltip)
 
 ## Is there any other information you’d like us to know?
+- I created a private Github repository and committed my code there
+- Square makes great Open Source libraries, so thank you!
