@@ -30,14 +30,14 @@ A sample Android directory app that shows a list of employees from an endpoint
 - Overall, staying within the constraints outline in the prompt, I'm very proud of this work
 
 ## Did you copy any code or dependencies? Please make sure to attribute them here!
-- No code was copied, I did use the following libraries:
-  - [Hilt](https://github.com/google/dagger/tree/master/java/dagger/hilt)
-  - [Moshi](https://github.com/square/moshi)
-  - [Retrofit](https://github.com/square/retrofit)
-  - [OkHttp](https://github.com/square/okhttp)
-  - [Timber](https://github.com/JakeWharton/timber)
-  - [Glide](https://github.com/bumptech/glide)
-  - [Android Simple Tooltip](https://github.com/douglasjunior/android-simple-tooltip)
+- No code was copied, I did use the following Android libraries:
+  - [Hilt](https://github.com/google/dagger/tree/master/java/dagger/hilt) - dependency injection
+  - [Moshi](https://github.com/square/moshi) - JSON parsing an serialization
+  - [Retrofit](https://github.com/square/retrofit) - HTTP client
+  - [OkHttp](https://github.com/square/okhttp) - network requests
+  - [Timber](https://github.com/JakeWharton/timber) - logging
+  - [Glide](https://github.com/bumptech/glide) - image loading and caching
+  - [Android Simple Tooltip](https://github.com/douglasjunior/android-simple-tooltip) - UI tooltips
 
 ## Is there any other information you’d like us to know?
 - I created a private Github repository and committed my code there
