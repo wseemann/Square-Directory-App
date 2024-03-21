@@ -1,7 +1,5 @@
 # Square-Directory-App
 An Open Source sample Android employee directory app that shows a list of employees from an endpoint
-
-When interviewing Square for Android role you will be asked to complete a mobile take home project. You'll be building an employee directory app. The prompt for the project can be found [here](https://square.github.io/microsite/mobile-interview-project/).
  
 ## Build tools & versions used
 - Android Studio Giraffe | 2022.3.1 Patch 4
